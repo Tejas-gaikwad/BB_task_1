@@ -20,13 +20,11 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   void startScan() {
-    print("SCANNING device ...");
-
     try {
       var subscription = FlutterBluePlus.onScanResults.listen(
         (results) {
           if (results.isNotEmpty) {
-            ScanResult r = results.last; // the most recently found device
+            ScanResult r = results.last;
             print(
                 '${r.device.remoteId}: "${r.advertisementData.advName}" found!');
           }
@@ -34,8 +32,8 @@ class _ConnectPageState extends State<ConnectPage> {
         onError: (e) => print(e),
       );
       FlutterBluePlus.startScan(
-        withServices: [Guid("180D")], // match any of the specified services
-        withNames: ["Bluno"], // *or* any of the specified names
+        withServices: [Guid("180D")],
+        withNames: ["Bluno"],
         timeout: Duration(seconds: 40),
       );
       FlutterBluePlus.scanResults.listen((results) {
@@ -53,18 +51,13 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
-    print("Connecting device ...");
-
     try {
-      // Ensure the device is disconnected first
       await device.disconnect();
-      print("Device disconnected ...");
     } catch (e) {
       print('Error disconnecting: $e');
     }
 
     try {
-      // Connect to the device
       await device.connect();
       print("Device connected...");
       print('Connected to ${device.name}');
@@ -72,7 +65,6 @@ class _ConnectPageState extends State<ConnectPage> {
       print('Error connecting: $e');
     }
 
-    // Handle successful connection
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ChatPage(device: device)));
   }
